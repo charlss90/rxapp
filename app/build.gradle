@@ -32,4 +32,11 @@ dependencies {
     compile 'com.google.dagger:dagger:2.0'
 
     provided 'javax.annotation:jsr250-api:1.0'
+
+//    Lombok
+    provided "org.projectlombok:lombok:1.12.6"
+
+//    Reactive Java
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxjava:1.0.14'
 }

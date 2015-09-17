@@ -1,6 +1,10 @@
 package com.pazmino.edu.rxapp.models;
 
-public class Todo {
+import lombok.Data;
+
+public
+@Data
+class Todo {
 
 
     private String title;
@@ -13,22 +17,10 @@ public class Todo {
     }
 
 
-    public String getDescription() {
-        return description;
-    }
-
-
-    public String getTitle() {
-        return title;
-    }
-
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
-    public void setTitle(String title) {
-        this.title = title;
+    public boolean isValid() {
+        return title != null &&
+                !title.isEmpty() &&
+                description != null &&
+                !description.isEmpty();
     }
 }

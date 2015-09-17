@@ -5,24 +5,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.pazmino.edu.rxapp.app.App;
+import com.pazmino.edu.rxapp.events.ClickEvent;
+import com.pazmino.edu.rxapp.events.ClickedAcceptButtonEvent;
 import com.pazmino.edu.rxapp.models.ITodoServices;
-import com.pazmino.edu.rxapp.models.Todo;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -47,16 +56,17 @@ public class MainActivity extends AppCompatActivity
         ((App) getApplication()).getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
 
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-
-        todoServices.save(new Todo("AnyTitle", "AnyDescription"));
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
     }
 
     @Override
@@ -121,12 +131,16 @@ public class MainActivity extends AppCompatActivity
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment{
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+
+        private Button acceptButton;
+        private View rootView;
+        private EditText sampleText;
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -143,11 +157,44 @@ public class MainActivity extends AppCompatActivity
         public PlaceholderFragment() {
         }
 
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            onBound();
             return rootView;
+        }
+
+
+        private void onBound() {
+            injectComponents();
+            Observable<ClickEvent> obs = Observable.create(new Observable.OnSubscribe<ClickEvent>() {
+                @Override
+                public void call(final Subscriber<? super ClickEvent> subscriber) {
+                    acceptButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            subscriber.onNext(new ClickedAcceptButtonEvent(v));
+                        }
+                    });
+                }
+            });
+
+            obs.subscribeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ClickEvent>() {
+                @Override
+                public void call(ClickEvent clickEvent) {
+                    if (clickEvent instanceof ClickedAcceptButtonEvent) {
+                        Toast.makeText(getContext(), "Clicked", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+
+        private void injectComponents() {
+            acceptButton = (Button) rootView.findViewById(R.id.accept_button);
+            sampleText = (EditText) rootView.findViewById(R.id.sample_text);
         }
 
         @Override
