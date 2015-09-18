@@ -21,6 +21,7 @@ import com.pazmino.edu.rxapp.events.ClickEvent;
 import com.pazmino.edu.rxapp.events.ClickedAcceptButtonEvent;
 import com.pazmino.edu.rxapp.models.ITodoServices;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
+import lombok.val;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -56,7 +58,6 @@ public class MainActivity extends AppCompatActivity
         ((App) getApplication()).getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
 
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
     }
+
 
     public void onSectionAttached(int number) {
         switch (number) {

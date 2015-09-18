@@ -1,10 +1,12 @@
 package com.pazmino.edu.rxapp.models;
 
-import lombok.Data;
+import java.util.ArrayList;
 
-public
+import lombok.Data;
+import lombok.val;
+
 @Data
-class Todo {
+public class Todo {
 
 
     private String title;

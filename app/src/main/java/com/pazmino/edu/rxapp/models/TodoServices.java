@@ -1,13 +1,12 @@
 package com.pazmino.edu.rxapp.models;
 
 
-import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class TodoServices implements ITodoServices {
