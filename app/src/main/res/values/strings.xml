@@ -14,4 +14,5 @@
     <string name="insert_here">Escriba aquí</string>
     <string name="accept">Aceptar</string>
     <string name="title_test">Test RxApp</string>
+    <string name="products_detail_counter">Cantidad  %s</string>
 </resources>

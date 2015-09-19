@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     ITodoServices todoServices;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,25 +96,26 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
+
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
             return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    public void restoreActionBar() {
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+//            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+//            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(mTitle);
+        }
     }
 
     @Override
@@ -124,6 +126,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+//            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            return super.onOptionsItemSelected(item);
+        }
+
         if (id == R.id.action_settings) {
             return true;
         }
